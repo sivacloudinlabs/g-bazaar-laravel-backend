@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('number')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('gender', GENDERS)->default('others');
+            $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('reporting_to')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
