@@ -49,4 +49,9 @@ class Offer extends Model
     {
         return $this->belongsTo(Bank::class, 'bank_id', 'id')->selectRaw('id, name');
     }
+
+    public function offer_interest_users()
+    {
+        return $this->hasMany(OfferInterestUser::class, 'offer_id', 'id');
+    }
 }

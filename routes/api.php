@@ -6,10 +6,13 @@ use App\Http\Controllers\ContentCategoryController;
 use App\Http\Controllers\ContentTypeController;
 use App\Http\Controllers\OfferCategoryController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\OfferInterestUserController;
 use App\Http\Controllers\OfferTypeController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
+use App\Mail\AccountConfrimationEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +67,15 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::options('offer-type/{offer_type}/offer-category', [OfferCategoryController::class, 'options']);
         // Offer
         Route::resource('offer', OfferController::class);
+        Route::post('offer/{offer}/interested', [OfferInterestUserController::class, 'store']);
         Route::put('offer/{offer}/on-hold', [OfferController::class, 'onHold']);
     });
+});
+
+Route::get('mail', function() {
+
+    // return view('mail.account_confirmation');
+    Mail::to('siva@cloudinlabs.com')->send(new AccountConfrimationEmail());
+    
+    return "Email sent successfully!";
 });

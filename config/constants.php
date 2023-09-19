@@ -58,3 +58,5 @@ const CREATED_SUCCESSFUL = "Created Successful";
 const EDITED_SUCCESSFUL = "Edited Successful";
 const UPDATED_SUCCESSFUL = "Updated Successful";
 const DELETED_SUCCESSFUL = "Deleted Successful";
+const SEND_INTEREST_SUCCESSFUL = "We appreciate your interest. We'll get in touch with you soon.";
+const ALREADY_SEND_INTEREST = "Thank you for your interest. However, you have already expressed interest; we'll contact you shortly.";
