@@ -23,6 +23,7 @@ class LoanRequest extends FormRequest
     {
         return [
             'offer_id' => ['required', 'exists:offers,id,is_active,1'],
+            'applied_user_id' => ['sometimes', 'nullable', 'exists:users,id,is_active,1'],
             'requested_amount' => ['required'],
             'loan_term' => ['required'],
             'quoted_amount' => ['required'],
@@ -45,7 +46,7 @@ class LoanRequest extends FormRequest
             'communication_address.landmark' => ['required_with:communication_address', 'string'],
             'communication_address.state' => ['required_with:communication_address', 'string'],
             'communication_address.pincode' => ['required_with:communication_address', 'string', 'digits:6'],
-            'communication_address.house_status' => ['required_with:communication_address', 'string', 'in:'. implode(',', HOME_STATUS)],
+            'communication_address.house_status' => ['required_with:communication_address', 'string', 'in:' . implode(',', HOME_STATUS)],
 
             // Permanent address
             'permanent_address' => ['sometimes', 'nullable', 'array'],
@@ -80,7 +81,7 @@ class LoanRequest extends FormRequest
             'upload_document.itr' => ['sometimes', 'nullable', 'url'],
             'upload_document.comapany_id_card' => ['sometimes', 'nullable', 'url'],
 
-            'status' => ['required'],
+            'status' => ['sometimes', 'nullable', 'in:' . implode(',', LOAN_STATUS)],
             'digital_signature' => ['required', 'url'],
         ];
     }

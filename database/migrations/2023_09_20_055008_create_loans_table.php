@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->string('temporary_code');
+            $table->string('temporary_code')->nullable();
             $table->string('loan_code')->unique()->nullable();
             $table->unsignedBigInteger('applied_user_id');
             $table->foreign('applied_user_id')->references('id')->on('users')->onDelete('cascade');
@@ -30,7 +30,8 @@ return new class extends Migration
             $table->json('permanent_address')->nullable();
             $table->json('work_information')->nullable();
             $table->json('upload_document')->nullable();
-            $table->enum('status', LOAN_STATUS)->nullable();
+            $table->text('digital_signature');
+            $table->enum('status', LOAN_STATUS)->default('draft');
             $table->timestamps();
         });
     }
