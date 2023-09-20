@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ContentCategoryController;
 use App\Http\Controllers\ContentTypeController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\OfferCategoryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OfferInterestUserController;
@@ -69,6 +70,10 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::resource('offer', OfferController::class);
         Route::post('offer/{offer}/interested', [OfferInterestUserController::class, 'store']);
         Route::put('offer/{offer}/on-hold', [OfferController::class, 'onHold']);
+
+        // Loan
+        Route::resource('loan', LoanController::class);
+
     });
 });
 

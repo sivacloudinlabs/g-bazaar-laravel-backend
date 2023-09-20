@@ -34,10 +34,29 @@ const BANK_TYPES = [
     'fi'
 ];
 
+const LOAN_STATUS = [
+    'draft',
+    'applied',
+    'lead',
+    'in_progress',
+    'on_hold',
+    'reinitiated',
+    'approved',
+    'rejected',
+    'disbursed',
+];
+
 const TASK_PRIORITY = [
     'low',
     'medium',
     'high'
+];
+
+const HOME_STATUS = [
+    'rental',
+    'owned',
+    'parental',
+    'company_provided'
 ];
 
 const PER_PAGE_DEFAULT = 100;
