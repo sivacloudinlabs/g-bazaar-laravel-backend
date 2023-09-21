@@ -73,7 +73,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
         // Loan
         Route::resource('loan', LoanController::class);
-
+        Route::put('loan/{loan}/apply', [LoanController::class, 'applyLoan']);
     });
 });
 

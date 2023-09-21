@@ -34,17 +34,28 @@ const BANK_TYPES = [
     'fi'
 ];
 
+const LOAN_STATUS_DRAFT = 'draft';
+const LOAN_STATUS_APPLIED = 'applied';
+const LOAN_STATUS_LEAD = 'lead';
+const LOAN_STATUS_IN_PROGRESS = 'in_progress';
+const LOAN_STATUS_ON_HOLD = 'on_hold';
+const LOAN_STATUS_REINITIATED = 'reinitiated';
+const LOAN_STATUS_APPROVED = 'approved';
+const LOAN_STATUS_REJECTED = 'rejected';
+const LOAN_STATUS_DISBURSED = 'disbursed';
+
 const LOAN_STATUS = [
-    'draft',
-    'applied',
-    'lead',
-    'in_progress',
-    'on_hold',
-    'reinitiated',
-    'approved',
-    'rejected',
-    'disbursed',
+    LOAN_STATUS_DRAFT,
+    LOAN_STATUS_APPLIED,
+    LOAN_STATUS_LEAD,
+    LOAN_STATUS_IN_PROGRESS,
+    LOAN_STATUS_ON_HOLD,
+    LOAN_STATUS_REINITIATED,
+    LOAN_STATUS_APPROVED,
+    LOAN_STATUS_REJECTED,
+    LOAN_STATUS_DISBURSED,
 ];
+
 
 const TASK_PRIORITY = [
     'low',
