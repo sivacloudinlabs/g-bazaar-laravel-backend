@@ -74,6 +74,9 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         // Loan
         Route::resource('loan', LoanController::class);
         Route::put('loan/{loan}/apply', [LoanController::class, 'applyLoan']);
+        Route::put('loan/{loan}/status/{status}', [LoanController::class, 'status']);
+        Route::put('loan/{loan}/assign-manager/{assign_manager}', [LoanController::class, 'assignManager']);
+        Route::put('loan/{loan}/remove-assigned-manager', [LoanController::class, 'removeAssignedManager']);
     });
 });
 

@@ -36,6 +36,20 @@ class Loan extends Model
         return json_decode($value, true);  
     }
     
+    public function applied_user()
+    {
+        return $this->belongsTo(User::class, 'applied_user_id', 'id')->selectRaw('id, name, number, email');
+    }
+
+    public function processing_user()
+    {
+        return $this->belongsTo(User::class, 'processing_user_id', 'id')->selectRaw('id, name, number, email');
+    }
+
+    public function offer()
+    {
+        return $this->belongsTo(Offer::class, 'offer_id', 'id');
+    }
 
     public static function inputDetails($request)
     {
