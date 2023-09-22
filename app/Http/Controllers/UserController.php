@@ -26,7 +26,7 @@ class UserController extends Controller
                // Search Fillter
                 $query->where(function ($whereQuery) use ($request) {
                     // TODO: whereLike is custom function, the function given by AppServiceProvider
-                    $whereQuery->whereLike(['name', 'email', 'number', 'gender'], $$request->search);
+                    $whereQuery->whereLike(['name', 'email', 'number', 'gender'], $request->search);
                     // Check relationship reporting_to
                     $whereQuery->orWhereHas('reporting_to', function ($whereHasQuery) use ($request) {
                         $whereHasQuery->where(function ($whereHasQuery) use ($request) {

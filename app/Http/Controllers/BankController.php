@@ -8,24 +8,33 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
-use Yajra\DataTables\Facades\DataTables;
 
 class BankController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $banks = Bank::all();
+        $this->validate($request, [
+            'search' => ['sometimes', 'nullable', 'string'],
+            'per_page' => ['sometimes', 'nullable', 'numeric', 'max:50'],
+            'type' => ['sometimes', 'nullable', 'in:' . implode(',', BANK_TYPES)],
+        ]);
 
-            return DataTables::of($banks)
-                ->addIndexColumn()
-                ->make(true);
-            // return response([
-            //     RESPONSE_MESSAGE => RETRIEVAL_SUCCESSFUL,
-            //     RESPONSE_DATA => [
-            //         'user' => $users,
-            //     ],
-            // ], Response::HTTP_OK);
+        try {
+            $banks = Bank::when(($request->search ?? false), function ($query) use ($request) {
+                 $query->where(function ($whereQuery) use ($request) {
+                     $whereQuery->whereLike(['type', 'name', 'code'], $request->search);
+                 });
+             })->when($request->type ?? false, function ($query) use ($request) {
+                 $query->where('type', $request->type);
+             })->paginate($request->per_page ?? DEFAULT_PER_PAGE);
+ 
+             return response([
+                 RESPONSE_MESSAGE => RETRIEVAL_SUCCESSFUL,
+                 RESPONSE_DATA => [
+                     'banks' => $banks,
+                     'filters' => $request->all()
+                 ],
+             ], Response::HTTP_OK);;
         } catch (Exception $exception) {
             return response(internalServerError500($exception, static::class, __FUNCTION__), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
