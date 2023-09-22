@@ -23,7 +23,7 @@ class UserController extends Controller
         try {
             // TODO: toSqlWithBindings
             $users = User::with(['reporting_to'])->when(($request->search ?? false), function ($query) use ($request) {
-               // Search Fillter
+                // Search Fillter
                 $query->where(function ($whereQuery) use ($request) {
                     // TODO: whereLike is custom function, the function given by AppServiceProvider
                     $whereQuery->whereLike(['name', 'email', 'number', 'gender'], $request->search);
