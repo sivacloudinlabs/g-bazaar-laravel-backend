@@ -13,6 +13,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        // Check Request Validation
         $this->validate($request, [
             'search' => ['sometimes', 'nullable', 'string'],
             'per_page' => ['sometimes', 'nullable', 'numeric', 'max:50'],
@@ -22,18 +23,19 @@ class UserController extends Controller
         try {
             // TODO: toSqlWithBindings
             $users = User::with(['reporting_to'])->when(($request->search ?? false), function ($query) use ($request) {
-                $search = $request->search;
-                $query->where(function ($whereQuery) use ($search) {
-                    // TODO: This is custom function, the function given by AppServiceProvider
-                    $whereQuery->multiWhereLike(['name', 'email', 'number', 'gender'], $search);
+               // Search Fillter
+                $query->where(function ($whereQuery) use ($request) {
+                    // TODO: whereLike is custom function, the function given by AppServiceProvider
+                    $whereQuery->whereLike(['name', 'email', 'number', 'gender'], $$request->search);
                     // Check relationship reporting_to
-                    $whereQuery->orWhereHas('reporting_to', function ($whereHasQuery) use ($search) {
-                        $whereHasQuery->where(function ($whereHasQuery) use ($search) {
-                            $whereHasQuery->multiWhereLike(['name', 'email', 'number'], $search);
+                    $whereQuery->orWhereHas('reporting_to', function ($whereHasQuery) use ($request) {
+                        $whereHasQuery->where(function ($whereHasQuery) use ($request) {
+                            $whereHasQuery->whereLike(['name', 'email', 'number'], $request->search);
                         });
                     });
                 });
             })->when($request->role ?? false, function ($query) use ($request) {
+                // Role Fillter
                 $query->whereHas('roles', function ($whereHasQuery) use ($request) {
                     $whereHasQuery->where('name', $request->role);
                 });

@@ -21,11 +21,7 @@ class AppServiceProvider extends ServiceProvider
             return Str::replaceArray('?', $bindings, $this->toSql());
         });
 
-        Builder::macro('whereLike', function (string $attribute, string $searchTerm) {
-            return $this->orWhere($attribute, 'LIKE', "%{$searchTerm}%");
-        });
-
-        Builder::macro('multiWhereLike', function ($attribute, string $TermToSearch) {
+        Builder::macro('whereLike', function ($attribute, string $TermToSearch) {
             foreach (array_wrap($attribute) as $attribute) {
                 $this->orWhere($attribute, 'LIKE', "%{$TermToSearch}%");
             }
