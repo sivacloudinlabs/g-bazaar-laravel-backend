@@ -8,33 +8,44 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $this->validate($request, [
+            'search' => ['sometimes', 'nullable', 'string'],
+            'per_page' => ['sometimes', 'nullable', 'numeric', 'max:50'],
+            'role' => ['sometimes', 'nullable', 'exists:roles,name'],
+        ]);
+
         try {
-            $users = User::all();
+            // TODO: toSqlWithBindings
+            $users = User::with(['reporting_to'])->when(($request->search ?? false), function ($query) use ($request) {
+                $search = $request->search;
+                $query->where(function ($whereQuery) use ($search) {
+                    // TODO: This is custom function, the function given by AppServiceProvider
+                    $whereQuery->multiWhereLike(['name', 'email', 'number', 'gender'], $search);
+                    // Check relationship reporting_to
+                    $whereQuery->orWhereHas('reporting_to', function ($whereHasQuery) use ($search) {
+                        $whereHasQuery->where(function ($whereHasQuery) use ($search) {
+                            $whereHasQuery->multiWhereLike(['name', 'email', 'number'], $search);
+                        });
+                    });
+                });
+            })->when($request->role ?? false, function ($query) use ($request) {
+                $query->whereHas('roles', function ($whereHasQuery) use ($request) {
+                    $whereHasQuery->where('name', $request->role);
+                });
+            })->paginate($request->per_page ?? DEFAULT_PER_PAGE);
 
-            return DataTables::of($users)
-                ->addIndexColumn()
-                // ->addColumn('action', function($row){
-
-                //        $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-
-                //         return $btn;
-                // })
-                // ->rawColumns(['action'])
-                ->make(true);
-            // return response([
-            //     RESPONSE_MESSAGE => RETRIEVAL_SUCCESSFUL,
-            //     RESPONSE_DATA => [
-            //         'user' => $users,
-            //     ],
-            // ], Response::HTTP_OK);
+            return response([
+                RESPONSE_MESSAGE => RETRIEVAL_SUCCESSFUL,
+                RESPONSE_DATA => [
+                    'users' => $users,
+                    'filters' => $request->all()
+                ],
+            ], Response::HTTP_OK);
         } catch (Exception $exception) {
             return response(internalServerError500($exception, static::class, __FUNCTION__), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

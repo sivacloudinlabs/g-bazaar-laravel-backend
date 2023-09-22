@@ -1,5 +1,5 @@
 <?php
-
+const DEFAULT_PER_PAGE = 50;
 const SUPER_ADMIN_ROLE = 'super_admin';
 const ADMIN_ROLE = 'admin';
 const CUSTOMER_ROLE = 'customer';

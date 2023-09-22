@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasOne(UserDetail::class, 'user_id', 'id');
     }
 
+    public function reporting_to()
+    {
+        return $this->belongsTo(User::class, 'reporting_to', 'id');
+    }
+
     public static function inputDetails($request)
     {
         return [
